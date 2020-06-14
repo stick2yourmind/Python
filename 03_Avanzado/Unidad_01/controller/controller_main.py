@@ -1,0 +1,87 @@
+import sys
+sys.path.append("..")
+import re
+import sys
+sys.path.append('..')
+from model.model_db import *
+from model.model_shelve import *
+
+Pattern = "^[A-Za-z]+(?:[ _-][A-Za-z]+)*$"
+
+my_sql_host_default = "localhost"
+my_sql_user_default = "root"
+my_sql_pass_default = ""
+my_sql_db_default = "baseprueba3"
+my_sql_table_default = "producto"
+my_sql_struct_default = "CREATE TABLE IF NOT EXISTS producto( id int(11) NOT NULL PRIMARY KEY \
+AUTO_INCREMENT, titulo VARCHAR(128) COLLATE utf8_spanish2_ci NOT NULL, descripcion text COLLATE \
+utf8_spanish2_ci NOT NULL )"
+columns_name_list = ["titulo", "descripcion"]
+title = 0
+description = 1
+
+reg = MySQL(my_sql_host=my_sql_host_default, my_sql_user=my_sql_user_default, my_sql_pass=my_sql_pass_default,
+                 my_sql_db=my_sql_db_default, my_sql_table=my_sql_table_default, my_sql_struct=my_sql_struct_default)
+
+def validate(pattern, to_validate):
+    r_aux = re.compile(pattern)
+    return r_aux.search(to_validate)
+
+def create_db():
+    global reg
+    aux = reg.create_db()
+    return aux
+
+
+def create_table():
+    global reg
+    aux = reg.create_table()
+    return aux
+
+def controller_add_reg(input_title, input_description):
+    global columns_name_list
+    aux = 0
+    columns_value_list = [input_title, input_description]
+    # Clean entry title and entry description
+    if validate(Pattern, columns_value_list[title]):
+        try:
+            aux = reg.add_register(columns_name_list, columns_value_list)
+            print(str(aux) + " register has been added")
+        except:
+            print("Register could not been added")
+    return aux
+
+def controller_update_reg(id_reg, input_title, input_description):
+    a = ["id", "titulo", "descripcion"]
+    b = [id_reg, input_title, input_description]
+    aux = reg.update_register(a,b)
+    return aux
+
+def controller_delete_reg(id_reg):
+    aux = reg.delete_register(id_reg)
+    return aux
+
+def controller_create_d_b():
+    error = -1
+    aux = create_db()
+    if aux == error:
+        return aux
+    else:
+        aux = create_table()
+    return aux
+
+
+def controller_show_reg():
+    print("controller_show_reg pressed at controller")
+    global reg
+    my_sql_query = "SELECT producto.id, producto.titulo, producto.descripcion \
+FROM " + reg.get_my_sql_db() + ".producto"
+    fetched = reg.query(my_sql_query)
+    return fetched
+
+def controller_theme(theme_name, color="default", act="choose"):
+    if act=="choose":
+        return choose_theme(theme_name)
+    else:
+        save_theme(theme_name, color)
+
