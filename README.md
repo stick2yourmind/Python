@@ -16,4 +16,6 @@ Unit - 01:
 		Rev. 1.1:
 			Added show_reg_orm model method, implemented as a query
 		Rev. 1.2:
-			Added show_reg_orm model method
+			Added delete_reg_orm model method
+		Rev. 1.3:
+			Added update_register_orm model method to complete CRUD application.

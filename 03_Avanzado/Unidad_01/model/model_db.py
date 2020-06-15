@@ -888,3 +888,35 @@ def delete_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass
     return aux
 
 
+
+def update_register_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list, reg_item):
+    aux = -1
+    try:
+        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
+                           user=my_sql_user,
+                           passwd=my_sql_pass)
+
+        class Catalogue(Model):
+            class Meta:
+                database = db
+
+        class RegItem(Catalogue):
+            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
+            # classAutoField:
+            # Field class for storing auto-incrementing primary keys.
+            locals()[columns_name_list[0]] = TextField()
+            locals()[columns_name_list[1]]  = TextField()
+
+        db.connect()
+        updateReg = RegItem.get(RegItem.id == int(reg_item[0]) )
+        updateReg.titulo = reg_item[1]
+        updateReg.descripcion = reg_item[2]
+        updateReg.save()
+        db.close()
+        aux = 1
+        print("update_register_orm: Register updated")
+    except:
+        print("update_register_orm: Error")
+    return aux
+
+
