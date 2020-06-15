@@ -11,7 +11,7 @@ Pattern = "^[A-Za-z]+(?:[ _-][A-Za-z]+)*$"
 my_sql_host_default = "localhost"
 my_sql_user_default = "root"
 my_sql_pass_default = ""
-my_sql_db_default = "baseprueba3"
+my_sql_db_default = "baseprueba4"
 my_sql_table_default = "producto"
 my_sql_struct_default = "CREATE TABLE IF NOT EXISTS producto( id int(11) NOT NULL PRIMARY KEY \
 AUTO_INCREMENT, titulo VARCHAR(128) COLLATE utf8_spanish2_ci NOT NULL, descripcion text COLLATE \
@@ -32,23 +32,36 @@ def create_db():
     aux = reg.create_db()
     return aux
 
-
 def create_table():
-    global reg
-    aux = reg.create_table()
+    global columns_name_list
+    my_sql_db = my_sql_db_default
+    my_sql_port = 3306
+    my_sql_host = my_sql_host_default
+    my_sql_user = my_sql_user_default
+    my_sql_pass = my_sql_pass_default
+    aux = create_table_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list)
     return aux
 
 def controller_add_reg(input_title, input_description):
     global columns_name_list
-    aux = 0
+    aux = -1
+    my_sql_db = my_sql_db_default
+    my_sql_port = 3306
+    my_sql_host = my_sql_host_default
+    my_sql_user = my_sql_user_default
+    my_sql_pass = my_sql_pass_default
     columns_value_list = [input_title, input_description]
     # Clean entry title and entry description
     if validate(Pattern, columns_value_list[title]):
         try:
-            aux = reg.add_register(columns_name_list, columns_value_list)
-            print(str(aux) + " register has been added")
+            dictItem = {}
+            dictItem[str(columns_name_list[0])] = str(columns_value_list[0])
+            dictItem[str(columns_name_list[1])] = str(columns_value_list[1])
+            aux = add_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list,
+                                  **dictItem)
+            print("controller_add_reg: register added")
         except:
-            print("Register could not been added")
+            print("controller_add_reg: error")
     return aux
 
 def controller_update_reg(id_reg, input_title, input_description):

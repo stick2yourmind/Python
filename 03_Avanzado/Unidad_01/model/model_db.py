@@ -1,4 +1,5 @@
 import mysql.connector
+from peewee import *
 
 
 def update_where_id_my_sql(my_sql_host, my_sql_user, my_sql_pass, my_sql_db, my_sql_table,
@@ -762,3 +763,61 @@ class MySQL:
 
     def get_my_sql_struct(self):
         return self.my_sql_struct
+
+
+def create_table_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list):
+    aux = -1
+    try:
+        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
+                           user=my_sql_user,
+                           passwd=my_sql_pass)
+
+        class Catalogue(Model):
+            class Meta:
+                database = db
+
+        class RegItem(Catalogue):
+            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
+            # classAutoField:
+            # Field class for storing auto-incrementing primary keys.
+            locals()[columns_name_list[0]] = TextField()
+            locals()[columns_name_list[1]]  = TextField()
+
+        db.connect()
+        db.create_tables([RegItem])
+        db.close()
+        aux = 1
+        print("create_table_orm: Table has been created")
+    except:
+        print("create_table_orm: Error")
+    return aux
+
+def add_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list,**dictItem):
+    aux = -1
+    try:
+        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
+                           user=my_sql_user,
+                           passwd=my_sql_pass)
+
+        class Catalogue(Model):
+            class Meta:
+                database = db
+
+        class RegItem(Catalogue):
+            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
+            # classAutoField:
+            # Field class for storing auto-incrementing primary keys.
+            locals()[columns_name_list[0]] = TextField()
+            locals()[columns_name_list[1]]  = TextField()
+
+        db.connect()
+        print(dictItem)
+        aux = RegItem(**dictItem)
+        aux.save()
+        db.close()
+        aux = 1
+        print("add_reg_orm: Register has been added")
+    except:
+        print("add_reg_orm: Error")
+    return aux
+
