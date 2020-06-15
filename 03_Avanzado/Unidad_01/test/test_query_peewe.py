@@ -12,10 +12,11 @@ my_sql_port = 3306
 my_sql_host = my_sql_host_default
 my_sql_user = my_sql_user_default
 my_sql_pass = my_sql_pass_default
+
+
 db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
                    user=my_sql_user,
                    passwd=my_sql_pass)
-
 
 class Catalogue(Model):
     class Meta:
@@ -31,13 +32,14 @@ class RegItem(Catalogue):
 
 
 db.connect()
-
+fetched = []
 query = RegItem.select(RegItem.id, RegItem.titulo, RegItem.descripcion)
-print(query)
-for aux in query:
-    print(aux.id)
-    print(aux.titulo)
-    print(aux.descripcion)
+for item in query:
+    fetched.append((item.id, item.titulo, item.descripcion))
+    print(item.id)
+    print(item.titulo)
+    print(item.descripcion)
+print(fetched)
 
 db.close()
 aux = 1

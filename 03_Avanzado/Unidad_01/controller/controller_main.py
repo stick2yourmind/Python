@@ -85,11 +85,18 @@ def controller_create_d_b():
 
 
 def controller_show_reg():
-    print("controller_show_reg pressed at controller")
-    global reg
-    my_sql_query = "SELECT producto.id, producto.titulo, producto.descripcion \
-FROM " + reg.get_my_sql_db() + ".producto"
-    fetched = reg.query(my_sql_query)
+    global columns_name_list
+    fetched = -1
+    my_sql_db = my_sql_db_default
+    my_sql_port = 3306
+    my_sql_host = my_sql_host_default
+    my_sql_user = my_sql_user_default
+    my_sql_pass = my_sql_pass_default
+    try:
+        fetched = show_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list)
+        print("controller_show_reg: Executed succesfully")
+    except:
+        print("controller_show_reg: Error")
     return fetched
 
 def controller_theme(theme_name, color="default", act="choose"):

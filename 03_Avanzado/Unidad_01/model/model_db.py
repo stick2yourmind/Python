@@ -821,3 +821,41 @@ def add_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, c
         print("add_reg_orm: Error")
     return aux
 
+
+
+def show_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list):
+    aux = -1
+    try:
+        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
+                           user=my_sql_user,
+                           passwd=my_sql_pass)
+
+        class Catalogue(Model):
+            class Meta:
+                database = db
+
+        class RegItem(Catalogue):
+            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
+            # classAutoField:
+            # Field class for storing auto-incrementing primary keys.
+            locals()[columns_name_list[0]] = TextField()
+            locals()[columns_name_list[1]]  = TextField()
+
+        db.connect()
+        fetched = []
+        query = RegItem.select(RegItem.id, RegItem.titulo, RegItem.descripcion)
+        for item in query:
+            fetched.append((item.id, item.titulo, item.descripcion))
+            print(item.id)
+            print(item.titulo)
+            print(item.descripcion)
+        print(fetched)
+        db.close()
+        print("show_reg_orm: Data fetched returned")
+        return fetched
+    except:
+        print("show_reg_orm: Error")
+        return aux
+
+
+
