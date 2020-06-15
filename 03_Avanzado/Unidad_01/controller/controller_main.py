@@ -71,7 +71,18 @@ def controller_update_reg(id_reg, input_title, input_description):
     return aux
 
 def controller_delete_reg(id_reg):
-    aux = reg.delete_register(id_reg)
+    global columns_name_list
+    aux = -1
+    my_sql_db = my_sql_db_default
+    my_sql_port = 3306
+    my_sql_host = my_sql_host_default
+    my_sql_user = my_sql_user_default
+    my_sql_pass = my_sql_pass_default
+    try:
+        aux = delete_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list, id_reg)
+        print("controller_delete_reg: Register deleted")
+    except:
+        print("controller_delete_reg: Error")
     return aux
 
 def controller_create_d_b():

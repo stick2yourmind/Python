@@ -858,4 +858,33 @@ def show_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, 
         return aux
 
 
+def delete_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list, id_reg):
+    aux = -1
+    print(id_reg)
+    try:
+        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
+                           user=my_sql_user,
+                           passwd=my_sql_pass)
+
+        class Catalogue(Model):
+            class Meta:
+                database = db
+
+        class RegItem(Catalogue):
+            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
+            # classAutoField:
+            # Field class for storing auto-incrementing primary keys.
+            locals()[columns_name_list[0]] = TextField()
+            locals()[columns_name_list[1]]  = TextField()
+
+        db.connect()
+        deleteReg = RegItem.get(RegItem.id == int(id_reg) )
+        deleteReg.delete_instance()
+        db.close()
+        aux = 1
+        print("delete_reg_orm: Register deleted")
+    except:
+        print("delete_reg_orm: Error")
+    return aux
+
 

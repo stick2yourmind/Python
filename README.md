@@ -15,3 +15,5 @@ Unit - 01:
 			Know issues: query does not work but query example at test folder works. Next revision will implement queries
 		Rev. 1.1:
 			Added show_reg_orm model method, implemented as a query
+		Rev. 1.2:
+			Added show_reg_orm model method
