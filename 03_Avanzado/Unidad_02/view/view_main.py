@@ -77,6 +77,7 @@ class WindowView:
         center(self.window)
 
     def layout_make(self, tab="default"):
+        print("layout_make: starting")
         if tab=="default":
             self.frame_mw.pack()
             # First row
@@ -104,8 +105,10 @@ class WindowView:
             self.frame_mw.Radio_theme_2 = Radiobutton(self.frame_mw)
             self.frame_mw.Radio_theme_3 = Radiobutton(self.frame_mw)
         self.layout_config(tab)
+        print("layout_make: finished")
 
     def layout_config(self, tab="default"):
+        print("layout_config: starting")
         if tab=="default":
             # First row
             self.frame_mw.Label_head.configure(text="Ingrese sus datos", bg="#b92041", fg="white",
@@ -179,29 +182,39 @@ class WindowView:
             controller_theme("tema_1", "#eb6434", act="save")
             controller_theme("tema_2", "#264653", act="save")
             controller_theme("tema_3", "#119296", act="save")
+        print("layout_config: finished")
 
     def clean_entry(self):
+        print("clean_entry: starting")
         self.var_entry[self.title].set("")
         self.var_entry[self.description].set("")
+        print("clean_entry: finished")
 
     def clean_table(self):
+        print("clean_table: starting")
         for i in self.frame_mw.Table.get_children():
             self.frame_mw.Table.delete(i)
+        print("clean_table: finished")
 
     def show_table(self, fetched):
+        print("show_table: starting")
         for x in range(len(fetched)):
             item = fetched[x]
-            self.frame_mw.Table.insert("", 'end', values=(item[0], item[1], item[2]))
+            self.frame_mw.Table.insert("", 'end', values=(item[0], item[1], item[2],item[3], item[4], item[5]))
+        print("show_table: finished")
 
     def click_show_reg(self):
+        print("click_show_reg: starting")
         fetched = controller_show_reg()
         if fetched == -1:
             showerror("¡Error de conexión!", ERROR_CONNECTION)
         else:
             self.clean_table()
             self.show_table(fetched)
+        print("click_show_reg: finished")
 
     def click_add_reg(self, input_title, input_description):
+        print("click_add_reg: starting")
         aux = controller_add_reg(input_title, input_description)
         if aux == 0:
             showerror("¡Título no válido!", ERROR_TITLE)
@@ -210,8 +223,10 @@ class WindowView:
         elif aux > 0:
             self.clean_entry()
             self.click_show_reg()
+        print("click_add_reg: finished")
 
     def click_update_reg(self):
+        print("click_update_reg: starting")
         if None != self.item_selected:
             self.title_selected = self.var_entry[self.title].get()
             self.description_selected = self.var_entry[self.description].get()
@@ -230,8 +245,10 @@ class WindowView:
                 showinfo("Actualizado", "Actualización del registro finalizado con exito.")
         else:
             showerror("¡Registro no seleccionado!", ERROR_SELECT_ITEM)
+        print("click_update_reg: finished")
 
     def click_delete_reg(self):
+        print("click_delete_reg: starting")
         if None != self.item_selected:
             aux = controller_delete_reg(self.item_selected)
             if aux == -1 or aux == 0:
@@ -244,34 +261,34 @@ class WindowView:
                 self.click_show_reg()
         else:
             showerror("¡Registro no seleccionado!", ERROR_SELECT_ITEM)
-
+        print("click_delete_reg: finished")
 
     def ch_color(self, theme_name):
+        print("ch_color: starting")
         r = controller_theme(theme_name, act="choose")
         self.window.configure(background=r)
         self.frame_mw.configure(background=r)
+        print("ch_color: finished")
 
     def table_double_click(self):
+        print("table_double_click: starting")
         self.item_selected=self.frame_mw.Table.item(self.frame_mw.Table.focus())
-        print(self.item_selected)
+        #print(self.item_selected)
         # Load focus item into entry's
-        self.var_entry[self.description].set(str(self.item_selected["values"][2]))
+        self.var_entry[self.description].set(str(self.item_selected["values"][3]))
         self.var_entry[self.title].set(str(self.item_selected["values"][1]))
         # Save item's ID into self.item_selected
-        self.description_selected=str(self.item_selected["values"][2])
+        self.description_selected=str(self.item_selected["values"][3])
         self.title_selected=str(self.item_selected["values"][1])
         self.item_selected = str(self.item_selected["values"][0])
         print("ID: " + self.item_selected)
+        print("table_double_click: finished")
 
     @staticmethod
     def click_create_d_b():
+        print("click_create_d_b: starting")
         aux = controller_create_d_b()
         if aux == -1:
             showerror("¡Error de conexión!", ERROR_CONNECTION)
+        print("click_create_d_b: finished")
 
-
-
-# Testing src
-# a = WindowView()
-# a.layout_make(tab="default")
-# mainloop()

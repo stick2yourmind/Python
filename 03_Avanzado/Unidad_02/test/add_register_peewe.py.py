@@ -91,14 +91,14 @@ class RegItem3(Catalogue):
 
 
 db.connect()
-columns_value_list = ["2", "titulo", None, "descripcion", "estado", "objeto"]
-updateReg = RegItem3.get(RegItem3.id == int(columns_value_list[0]) )
-updateReg.titulo = columns_value_list[1]
-updateReg.fecha = datetime.datetime.now()
-updateReg.descripcion = columns_value_list[3]
-updateReg.estado = columns_value_list[4]
-updateReg.objeto = columns_value_list[5]
-updateReg.save()
+columns_value_list = ["5", "titulo", None, "descripcion", "estado", "objeto"]
+RegItem3 = RegItem3()
+RegItem3.titulo = columns_value_list[1]
+RegItem3.fecha = datetime.datetime.now()
+RegItem3.descripcion = columns_value_list[3]
+RegItem3.estado = columns_value_list[4]
+RegItem3.objeto = columns_value_list[5]
+RegItem3.save()
 db.close()
 # There is another way to update registers, by using both update() and execute(). Check pdf at unit 1 to check how to
 # implement that solution.

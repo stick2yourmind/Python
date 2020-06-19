@@ -3,21 +3,12 @@ sys.path.append("..")
 import re
 import sys
 sys.path.append('..')
-from model.model_db import *
+from model.model_db import create_db_my_sql, create_table_orm, show_reg_orm, add_reg_orm, delete_reg_orm, update_register_orm
 from model.model_shelve import *
+import datetime
 
 Pattern = "^[A-Za-z]+(?:[ _-][A-Za-z]+)*$"
-
-my_sql_host_default = "localhost"
-my_sql_port_default = 3306
-my_sql_user_default = "root"
-my_sql_pass_default = ""
-my_sql_db_default = "catalogueDB"
-my_sql_table_default = "producto"
-my_sql_struct_default = "CREATE TABLE IF NOT EXISTS producto( id int(11) NOT NULL PRIMARY KEY \
-AUTO_INCREMENT, titulo VARCHAR(128) COLLATE utf8_spanish2_ci NOT NULL, descripcion text COLLATE \
-utf8_spanish2_ci NOT NULL )"
-columns_name_list = ["titulo", "descripcion"]
+columns_name_list = ["titulo", "fecha", "descripcion", "estado", "objeto"]
 title = 0
 description = 1
 
@@ -27,85 +18,83 @@ def validate(pattern, to_validate):
     return r_aux.search(to_validate)
 
 def create_db():
-    global my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default, my_sql_pass_default
-    aux = create_db_my_sql(my_sql_host_default, my_sql_user_default, my_sql_pass_default, my_sql_db_default)
+    print("\tcreate_db: starting")
+    aux = create_db_my_sql()
+    print("\tcreate_db: finished")
     return aux
 
 def create_table():
-    global my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,  my_sql_pass_default, \
-        columns_name_list
-    aux = create_table_orm(my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,
-                           my_sql_pass_default, columns_name_list)
+    print("\tcreate_table: starting")
+    aux = create_table_orm()
+    print("\tcreate_table: finished")
     return aux
 
 def controller_add_reg(input_title, input_description):
-    global my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,  my_sql_pass_default, \
-        columns_name_list
+    print("\tcontroller_add_reg: starting")
     aux = -1
     columns_value_list = [input_title, input_description]
     # Clean entry title and entry description
     if validate(Pattern, columns_value_list[title]):
         try:
-            dictItem = {}
-            dictItem[str(columns_name_list[0])] = str(columns_value_list[0])
-            dictItem[str(columns_name_list[1])] = str(columns_value_list[1])
-            aux = add_reg_orm(my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,
-                              my_sql_pass_default, columns_name_list, **dictItem)
-            print("controller_add_reg: Model method has been executed")
+            aux = add_reg_orm(titulo = columns_value_list[0], descripcion = columns_value_list[1])
+            print("\tcontroller_add_reg: Model method has been executed")
         except:
-            print("controller_add_reg: Model method could not been executed")
+            print("\tcontroller_add_reg: Model method could not been executed")
+    print("\tcontroller_add_reg: finished")
     return aux
 
 def controller_update_reg(id_reg, input_title, input_description):
-    global my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,  my_sql_pass_default, \
-        columns_name_list
+    print("\tcontroller_update_reg: starting")
     aux = -1
     reg_item = [id_reg, input_title, input_description]
     try:
-        aux = update_register_orm(my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,
-                              my_sql_pass_default, columns_name_list, reg_item)
-        print("controller_update_reg: Model method has been executed")
+        aux = update_register_orm(reg_item)
+        print("\tcontroller_update_reg: Model method has been executed")
     except:
-        print("controller_update_reg: Model method could not been executed")
+        print("\tcontroller_update_reg: Model method could not been executed")
+    print("\tcontroller_update_reg: finished")
     return aux
 
 def controller_delete_reg(id_reg):
-    global my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,  my_sql_pass_default, \
-        columns_name_list
+    print("\tcontroller_delete_reg: starting")
     aux = -1
     try:
-        aux = delete_reg_orm(my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,
-                              my_sql_pass_default, columns_name_list, id_reg)
-        print("controller_delete_reg: Model method has been executed")
+        aux = delete_reg_orm(id_reg)
+        print("\tcontroller_delete_reg: Model method has been executed")
     except:
-        print("controller_delete_reg: Model method could not been executed")
+        print("\tcontroller_delete_reg: Model method could not been executed")
+    print("\tcontroller_delete_reg: finished")
     return aux
 
 def controller_create_d_b():
+    print("\tcontroller_create_d_b: starting")
     error = -1
     aux = create_db()
     if aux == error:
+        print("\tcontroller_create_d_b: finished")
         return aux
     else:
         aux = create_table()
+    print("\tcontroller_create_d_b: finished")
     return aux
 
-
 def controller_show_reg():
-    global my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,  my_sql_pass_default, \
-        columns_name_list
+    print("\tcontroller_show_reg: starting")
     fetched = -1
     try:
-        fetched = show_reg_orm(my_sql_db_default, my_sql_host_default, my_sql_port_default, my_sql_user_default,
-                              my_sql_pass_default, columns_name_list)
-        print("controller_show_reg: Executed succesfully")
+        fetched = show_reg_orm()
+        print("\tcontroller_show_reg:  Model method has been executed")
     except:
-        print("controller_show_reg: Error")
+        print("\tcontroller_show_reg: Model method could not been executed")
+    print("\tcontroller_show_reg: finished")
     return fetched
 
 def controller_theme(theme_name, color="default", act="choose"):
+    print("\tcontroller_theme: starting")
     if act=="choose":
+        print("\tcontroller_theme: finished")
         return choose_theme(theme_name)
     else:
         save_theme(theme_name, color)
+        print("\tcontroller_theme: finished")
 

@@ -1,7 +1,39 @@
 import mysql.connector
 from peewee import *
+import datetime
 
-def create_db_my_sql(my_sql_host, my_sql_user, my_sql_pass, my_sql_db):
+# global variables connection to db
+my_sql_db = "catalogueDB"
+my_sql_host = "localhost"
+my_sql_port = 3306
+my_sql_user = "root"
+my_sql_pass = ""
+my_sql_table = "RegItem"
+my_sql_struct = "CREATE TABLE IF NOT EXISTS producto( id int(11) NOT NULL PRIMARY KEY \
+AUTO_INCREMENT, titulo VARCHAR(128) COLLATE utf8_spanish2_ci NOT NULL, descripcion text COLLATE \
+utf8_spanish2_ci NOT NULL )"
+
+
+# Creating a db connection
+db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
+                   user=my_sql_user,
+                   passwd=my_sql_pass)
+# Access to db
+class Catalogue(Model):
+    class Meta:
+        database = db
+# Access to table
+class RegItem(Catalogue):
+    titulo = TextField()
+    fecha  = DateTimeField(default=datetime.datetime.now())
+    descripcion  = TextField()
+    estado  = BooleanField(default=True)
+    objeto  = TextField()
+    def __str__(self):
+        return  "El título es: " + self.titulo
+
+
+def create_db_my_sql():
     """
 Create a database. Its name will be my_sql_db.
 
@@ -22,6 +54,11 @@ None : None
     has no return
 
     """
+    print("\t\tcreate_db_my_sql: starting")
+    global my_sql_db
+    global my_sql_host
+    global my_sql_user
+    global my_sql_pass
     aux = -1
     try:
         my_db = mysql.connector.connect(
@@ -34,166 +71,105 @@ None : None
         my_cursor.close()
         my_db.close()
         aux = 1
-        print("create_db_my_sql: DB has been created")
+        print("\t\tcreate_db_my_sql: DB has been created")
     except:
-        print("create_db_my_sql: Error")
+        print("\t\tcreate_db_my_sql: Error")
+    print("\t\tcreate_db_my_sql: finished")
     return aux
 
-
-
-
-def create_table_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list):
+def create_table_orm():
+    print("\t\tcreate_table_orm: starting")
+    global db
+    global RegItem
     aux = -1
     try:
-        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
-                           user=my_sql_user,
-                           passwd=my_sql_pass)
-
-        class Catalogue(Model):
-            class Meta:
-                database = db
-
-        class RegItem(Catalogue):
-            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
-            # classAutoField:
-            # Field class for storing auto-incrementing primary keys.
-            locals()[columns_name_list[0]] = TextField()
-            locals()[columns_name_list[1]]  = TextField()
-
         db.connect()
         db.create_tables([RegItem])
         db.close()
         aux = 1
-        print("create_table_orm: Table has been created")
+        print("\t\tcreate_table_orm: Table has been created")
     except:
-        print("create_table_orm: Error")
+        print("\t\tcreate_table_orm: Error")
+    print("\t\tcreate_table_orm: finished")
     return aux
 
-def add_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list,**dictItem):
-    aux = -1
+def add_reg_orm(titulo, descripcion):
+    print("\t\tadd_reg_orm: starting")
+    global db
+    global RegItem
     try:
-        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
-                           user=my_sql_user,
-                           passwd=my_sql_pass)
-
-        class Catalogue(Model):
-            class Meta:
-                database = db
-
-        class RegItem(Catalogue):
-            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
-            # classAutoField:
-            # Field class for storing auto-incrementing primary keys.
-            locals()[columns_name_list[0]] = TextField()
-            locals()[columns_name_list[1]]  = TextField()
-
         db.connect()
-        print(dictItem)
-        aux = RegItem(**dictItem)
-        aux.save()
+        obj = RegItem(titulo = titulo, descripcion = descripcion)
+        print(obj)
+        obj = RegItem(titulo = titulo, descripcion = descripcion, objeto = str(obj))
+        obj.save()
+        db.close()
         db.close()
         aux = 1
-        print("add_reg_orm: Register has been added")
+        print("\t\tadd_reg_orm: Register has been added")
     except:
-        print("add_reg_orm: Error")
+        print("\t\tadd_reg_orm: Error")
+    print("\t\tadd_reg_orm: finished")
     return aux
 
-
-
-def show_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list):
+def show_reg_orm():
+    print("\t\tshow_reg_orm: starting")
+    global db
+    global RegItem
     aux = -1
     try:
-        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
-                           user=my_sql_user,
-                           passwd=my_sql_pass)
-
-        class Catalogue(Model):
-            class Meta:
-                database = db
-
-        class RegItem(Catalogue):
-            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
-            # classAutoField:
-            # Field class for storing auto-incrementing primary keys.
-            locals()[columns_name_list[0]] = TextField()
-            locals()[columns_name_list[1]]  = TextField()
-
         db.connect()
         fetched = []
-        query = RegItem.select(RegItem.id, RegItem.titulo, RegItem.descripcion)
+        query = RegItem.select(RegItem.id, RegItem.titulo, RegItem.fecha, RegItem.descripcion, RegItem.estado,
+                               RegItem.objeto)
         for item in query:
-            fetched.append((item.id, item.titulo, item.descripcion))
-            print(item.id)
-            print(item.titulo)
-            print(item.descripcion)
-        print(fetched)
+            fetched.append((item.id, item.titulo, item.fecha, item.descripcion, item.estado, item.objeto))
         db.close()
-        print("show_reg_orm: Data fetched returned")
-        return fetched
+        print("\t\tshow_reg_orm: Data fetched returned")
+        aux = 1
     except:
-        print("show_reg_orm: Error")
+        print("\t\tshow_reg_orm: Error")
+    print("\t\tshow_reg_orm: finished")
+    if aux==-1:
         return aux
+    else:
+        return fetched
 
-
-def delete_reg_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list, id_reg):
+def delete_reg_orm(id_reg):
+    print("\t\tdelete_reg_orm: starting")
+    global db
+    global RegItem
     aux = -1
     print(id_reg)
     try:
-        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
-                           user=my_sql_user,
-                           passwd=my_sql_pass)
-
-        class Catalogue(Model):
-            class Meta:
-                database = db
-
-        class RegItem(Catalogue):
-            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
-            # classAutoField:
-            # Field class for storing auto-incrementing primary keys.
-            locals()[columns_name_list[0]] = TextField()
-            locals()[columns_name_list[1]]  = TextField()
-
         db.connect()
         deleteReg = RegItem.get(RegItem.id == int(id_reg) )
         deleteReg.delete_instance()
         db.close()
         aux = 1
-        print("delete_reg_orm: Register deleted")
+        print("\t\tdelete_reg_orm: Register deleted")
     except:
-        print("delete_reg_orm: Error")
+        print("\t\tdelete_reg_orm: Error")
+    print("\t\tdelete_reg_orm: finished")
     return aux
 
-
-
-def update_register_orm(my_sql_db, my_sql_host, my_sql_port, my_sql_user, my_sql_pass, columns_name_list, reg_item):
+def update_register_orm(reg_item):
+    print("\t\tupdate_register_orm: starting")
+    global db
+    global RegItem
     aux = -1
     try:
-        db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
-                           user=my_sql_user,
-                           passwd=my_sql_pass)
-
-        class Catalogue(Model):
-            class Meta:
-                database = db
-
-        class RegItem(Catalogue):
-            # id column is not required due to peewee auto generates it and assign a AutoField class to it.
-            # classAutoField:
-            # Field class for storing auto-incrementing primary keys.
-            locals()[columns_name_list[0]] = TextField()
-            locals()[columns_name_list[1]]  = TextField()
-
         db.connect()
-        updateReg = RegItem.get(RegItem.id == int(reg_item[0]) )
-        updateReg.titulo = reg_item[1]
-        updateReg.descripcion = reg_item[2]
-        updateReg.save()
+        updateReg = RegItem(titulo = reg_item[1], descripcion = reg_item[2])
+        updateReg = RegItem.update(titulo = reg_item[1], descripcion = reg_item[2], objeto = str(updateReg)).where(
+            RegItem.id==reg_item[0])
+        updateReg.execute()
         db.close()
         aux = 1
-        print("update_register_orm: Register updated")
+        print("\t\tupdate_register_orm: Register updated")
     except:
-        print("update_register_orm: Error")
+        print("\t\tupdate_register_orm: Error")
+    print("\t\tupdate_register_orm: finished")
     return aux
 
 

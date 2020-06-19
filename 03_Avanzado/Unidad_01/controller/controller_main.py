@@ -16,7 +16,7 @@ my_sql_table_default = "producto"
 my_sql_struct_default = "CREATE TABLE IF NOT EXISTS producto( id int(11) NOT NULL PRIMARY KEY \
 AUTO_INCREMENT, titulo VARCHAR(128) COLLATE utf8_spanish2_ci NOT NULL, descripcion text COLLATE \
 utf8_spanish2_ci NOT NULL )"
-columns_name_list = ["titulo", "descripcion"]
+columns_name_list = ["titulo", "fecha", "descripcion", "estado", "objeto"]
 title = 0
 description = 1
 

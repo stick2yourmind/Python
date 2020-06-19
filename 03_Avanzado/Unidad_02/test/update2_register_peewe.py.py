@@ -91,7 +91,7 @@ class RegItem3(Catalogue):
 
 
 db.connect()
-columns_value_list = ["2", "titulo", None, "descripcion", "estado", "objeto"]
+columns_value_list = ["5", "titulo", None, "descripcion", "estado", "objeto"]
 updateReg = RegItem3.get(RegItem3.id == int(columns_value_list[0]) )
 updateReg.titulo = columns_value_list[1]
 updateReg.fecha = datetime.datetime.now()

@@ -80,25 +80,25 @@ class Catalogue(Model):
         database = db
 
 class RegItem3(Catalogue):
-    # id column is not required due to peewee auto generates it and assign a AutoField class to it.
-    # classAutoField:
-    # Field class for storing auto-incrementing primary keys.
     locals()[columns_name_list[0]] = TextField()
     locals()[columns_name_list[1]]  = DateTimeField(default=datetime.datetime.now())
     locals()[columns_name_list[2]]  = TextField()
     locals()[columns_name_list[3]]  = BooleanField(default=True)
     locals()[columns_name_list[4]]  = TextField()
-
+    aux = "regItem3"
+    def __str__(self):
+        return self.aux
 
 db.connect()
-columns_value_list = ["2", "titulo", None, "descripcion", "estado", "objeto"]
-updateReg = RegItem3.get(RegItem3.id == int(columns_value_list[0]) )
-updateReg.titulo = columns_value_list[1]
-updateReg.fecha = datetime.datetime.now()
-updateReg.descripcion = columns_value_list[3]
-updateReg.estado = columns_value_list[4]
-updateReg.objeto = columns_value_list[5]
-updateReg.save()
+columns_value_list = ["5", "titulo", None, "descripcion", "estado", "objeto"]
+RegItem3 = RegItem3()
+RegItem3.titulo = columns_value_list[1]
+RegItem3.fecha = datetime.datetime.now()
+RegItem3.descripcion = columns_value_list[3]
+RegItem3.estado = columns_value_list[4]
+RegItem3.objeto = columns_value_list[5]
+print(RegItem3)
+RegItem3.save()
 db.close()
 # There is another way to update registers, by using both update() and execute(). Check pdf at unit 1 to check how to
 # implement that solution.

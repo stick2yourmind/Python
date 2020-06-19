@@ -23,4 +23,6 @@ Unit - 01:
 Unit - 02:
 		REV. 1.0:
 				View updated. Layout has been modified to have six columns at treeview.
-
+		REV. 2.0:
+                                Overloading __str__ in regItem class implemented. View, controller and model updated.
+	
