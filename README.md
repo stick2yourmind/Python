@@ -20,7 +20,9 @@ Unit - 01:
 		Rev. 1.3:
 			Added update_register_orm model method to complete CRUD application.
 
+
 Unit - 02:
+
 		REV. 1.0:
 				View updated. Layout has been modified to have six columns at treeview.
 		REV. 2.0:
