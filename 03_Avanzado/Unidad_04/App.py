@@ -1,3 +1,4 @@
+
 from view.view_main import *
 
 if __name__ == '__main__':

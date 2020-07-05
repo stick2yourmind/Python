@@ -13,24 +13,32 @@ my_sql_struct = "CREATE TABLE IF NOT EXISTS producto( id int(11) NOT NULL PRIMAR
 AUTO_INCREMENT, titulo VARCHAR(128) COLLATE utf8_spanish2_ci NOT NULL, descripcion text COLLATE \
 utf8_spanish2_ci NOT NULL )"
 
-
 # Creating a db connection
 db = MySQLDatabase(my_sql_db, host=my_sql_host, port=my_sql_port,
                    user=my_sql_user,
                    passwd=my_sql_pass)
+
+
 # Access to db
+
+
 class Catalogue(Model):
     class Meta:
         database = db
+
+
 # Access to table
+
+
 class RegItem(Catalogue):
     titulo = TextField()
-    fecha  = DateTimeField(default=datetime.datetime.now())
-    descripcion  = TextField()
-    estado  = BooleanField(default=True)
-    objeto  = TextField()
+    fecha = DateTimeField(default=datetime.datetime.now())
+    descripcion = TextField()
+    estado = BooleanField(default=True)
+    objeto = TextField()
+
     def __str__(self):
-        return  "El título es: " + self.titulo
+        return "El título es: " + self.titulo
 
 
 def create_db_my_sql():
@@ -77,6 +85,7 @@ None : None
     print("\t\tcreate_db_my_sql: finished")
     return aux
 
+
 def create_table_orm():
     print("\t\tcreate_table_orm: starting")
     global db
@@ -93,17 +102,31 @@ def create_table_orm():
     print("\t\tcreate_table_orm: finished")
     return aux
 
+
+def print_add(F):
+    def console_printer(*args):
+        aux = F(*args)
+        print("\t\t\taux = ", aux)
+        if aux == -1:
+            print("\t\t\tprintAdd: One register has been added by using decorator")
+        else:
+            print("\t\t\tprintAdd: Register could not been added by using decorator")
+
+    return console_printer
+
+
+@print_add
 def add_reg_orm(titulo, descripcion):
     print("\t\tadd_reg_orm: starting")
     global db
     global RegItem
+    aux = -1
     try:
         db.connect()
-        obj = RegItem(titulo = titulo, descripcion = descripcion)
+        obj = RegItem(titulo=titulo, descripcion=descripcion)
         print(obj)
-        obj = RegItem(titulo = titulo, descripcion = descripcion, objeto = str(obj))
+        obj = RegItem(titulo=titulo, descripcion=descripcion, objeto=str(obj))
         obj.save()
-        db.close()
         db.close()
         aux = 1
         print("\t\tadd_reg_orm: Register has been added")
@@ -111,6 +134,7 @@ def add_reg_orm(titulo, descripcion):
         print("\t\tadd_reg_orm: Error")
     print("\t\tadd_reg_orm: finished")
     return aux
+
 
 def show_reg_orm():
     print("\t\tshow_reg_orm: starting")
@@ -123,17 +147,19 @@ def show_reg_orm():
         query = RegItem.select(RegItem.id, RegItem.titulo, RegItem.fecha, RegItem.descripcion, RegItem.estado,
                                RegItem.objeto)
         for item in query:
-            fetched.append((item.id, item.titulo, item.fecha, item.descripcion, item.estado, item.objeto))
+            fetched.append((item.id, item.titulo, item.fecha,
+                            item.descripcion, item.estado, item.objeto))
         db.close()
         print("\t\tshow_reg_orm: Data fetched returned")
         aux = 1
     except:
         print("\t\tshow_reg_orm: Error")
     print("\t\tshow_reg_orm: finished")
-    if aux==-1:
+    if aux == -1:
         return aux
     else:
         return fetched
+
 
 def delete_reg_orm(id_reg):
     print("\t\tdelete_reg_orm: starting")
@@ -143,7 +169,7 @@ def delete_reg_orm(id_reg):
     print(id_reg)
     try:
         db.connect()
-        deleteReg = RegItem.get(RegItem.id == int(id_reg) )
+        deleteReg = RegItem.get(RegItem.id == int(id_reg))
         deleteReg.delete_instance()
         db.close()
         aux = 1
@@ -153,6 +179,7 @@ def delete_reg_orm(id_reg):
     print("\t\tdelete_reg_orm: finished")
     return aux
 
+
 def update_register_orm(reg_item):
     print("\t\tupdate_register_orm: starting")
     global db
@@ -160,9 +187,9 @@ def update_register_orm(reg_item):
     aux = -1
     try:
         db.connect()
-        updateReg = RegItem(titulo = reg_item[1], descripcion = reg_item[2])
-        updateReg = RegItem.update(titulo = reg_item[1], descripcion = reg_item[2], objeto = str(updateReg)).where(
-            RegItem.id==reg_item[0])
+        updateReg = RegItem(titulo=reg_item[1], descripcion=reg_item[2])
+        updateReg = RegItem.update(titulo=reg_item[1], descripcion=reg_item[2], objeto=str(updateReg)).where(
+            RegItem.id == reg_item[0])
         updateReg.execute()
         db.close()
         aux = 1
@@ -171,5 +198,3 @@ def update_register_orm(reg_item):
         print("\t\tupdate_register_orm: Error")
     print("\t\tupdate_register_orm: finished")
     return aux
-
-
