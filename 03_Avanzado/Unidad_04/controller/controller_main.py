@@ -1,11 +1,8 @@
 import sys
 sys.path.append("..")
 import re
-import sys
-sys.path.append('..')
 from model.model_db import create_db_my_sql, create_table_orm, show_reg_orm, add_reg_orm, delete_reg_orm, update_register_orm
 from model.model_shelve import *
-import datetime
 
 Pattern = "^[A-Za-z]+(?:[ _-][A-Za-z]+)*$"
 columns_name_list = ["titulo", "fecha", "descripcion", "estado", "objeto"]
@@ -36,7 +33,7 @@ def controller_add_reg(input_title, input_description):
     # Clean entry title and entry description
     if validate(Pattern, columns_value_list[title]):
         try:
-            aux = add_reg_orm(titulo = columns_value_list[0], descripcion = columns_value_list[1])
+            aux = add_reg_orm(columns_value_list[0], columns_value_list[1])
             print("\tcontroller_add_reg: Model method has been executed")
         except:
             print("\tcontroller_add_reg: Model method could not been executed")

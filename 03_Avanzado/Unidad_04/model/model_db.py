@@ -103,15 +103,14 @@ def create_table_orm():
     return aux
 
 
-def print_add(F):
+def print_add(fn):
     def console_printer(*args):
-        aux = F(*args)
-        print("\t\t\taux = ", aux)
-        if aux == -1:
-            print("\t\t\tprintAdd: One register has been added by using decorator")
+        aux = fn(*args)
+        if aux != -1:
+            print("\t\t\tprint_add: One register has been added by using decorator")
         else:
-            print("\t\t\tprintAdd: Register could not been added by using decorator")
-
+            print("\t\t\tprint_add: Register could not been added by using decorator")
+        return aux
     return console_printer
 
 
@@ -160,13 +159,23 @@ def show_reg_orm():
     else:
         return fetched
 
+def print_delete(fn):
+    def console_printer(*args):
+        aux = fn(*args)
+        if aux != -1:
+            print("\t\t\tprint_delete: One register has been deleted by using decorator")
+        else:
+            print("\t\t\tprint_delete: Register could not been deleted by using decorator")
+        return aux
+    return console_printer
 
+
+@print_delete
 def delete_reg_orm(id_reg):
     print("\t\tdelete_reg_orm: starting")
     global db
     global RegItem
     aux = -1
-    print(id_reg)
     try:
         db.connect()
         deleteReg = RegItem.get(RegItem.id == int(id_reg))
@@ -179,7 +188,18 @@ def delete_reg_orm(id_reg):
     print("\t\tdelete_reg_orm: finished")
     return aux
 
+def print_update(fn):
+    def console_printer(*args):
+        aux = fn(*args)
+        if aux != -1:
+            print("\t\t\tprint_update: One register has been updated by using decorator")
+        else:
+            print("\t\t\tprint_update: Register could not been updated by using decorator")
+        return aux
+    return console_printer
 
+
+@print_update
 def update_register_orm(reg_item):
     print("\t\tupdate_register_orm: starting")
     global db
