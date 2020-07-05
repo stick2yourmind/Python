@@ -105,7 +105,9 @@ def create_table_orm():
 
 def print_add(fn):
     def console_printer(*args):
-        aux = fn(*args)
+        print("\t\t\tprint_add: título = ", args[0])    # args[0] primer parámetro de add_reg_orm
+        print("\t\t\tprint_add: descripción = ", args[1]) # args[1] segundo parámetro de add_reg_orm
+        aux = fn(*args) # fn(*args) add_reg_orm's return
         if aux != -1:
             print("\t\t\tprint_add: One register has been added by using decorator")
         else:
@@ -123,7 +125,7 @@ def add_reg_orm(titulo, descripcion):
     try:
         db.connect()
         obj = RegItem(titulo=titulo, descripcion=descripcion)
-        print(obj)
+        print("\t\t", obj)
         obj = RegItem(titulo=titulo, descripcion=descripcion, objeto=str(obj))
         obj.save()
         db.close()
@@ -161,6 +163,7 @@ def show_reg_orm():
 
 def print_delete(fn):
     def console_printer(*args):
+        print("\t\t\tprint_delete: id = ", args[0])    # args[0] primer parámetro de delete_reg_orm
         aux = fn(*args)
         if aux != -1:
             print("\t\t\tprint_delete: One register has been deleted by using decorator")
@@ -190,6 +193,9 @@ def delete_reg_orm(id_reg):
 
 def print_update(fn):
     def console_printer(*args):
+        print("\t\t\tprint_update: id = ", args[0][0])  # args[0][0] primer elemento del parámetro de update_register_orm
+        print("\t\t\tprint_update: título = ", args[0][1])  # args[0][1] segundo elemento del primer parámetro de update_register_orm
+        print("\t\t\tprint_update: descripción = ", args[0][2])  # args[0][2] tercer elemento del primer parámetro de update_register_orm
         aux = fn(*args)
         if aux != -1:
             print("\t\t\tprint_update: One register has been updated by using decorator")

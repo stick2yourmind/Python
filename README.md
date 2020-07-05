@@ -47,3 +47,9 @@ Unit - 04:
                     "print_add: Register could not been added by using decorator", 
                     "print_delete: Register could not been deleted by using decorator" y 
                     "print_update: Register could not been updated by using decorator".
+
+    	REV. 2.1:
+    	        Añadido información adicional del registro impreso en cada decorador.
+    	            print_add: informa título y descripción, únicos parametro recibidos por add_reg_orm.
+    	            print_delete: informa id, único parametro recibido por delete_reg_orm.
+    	            print_update: informa id, título y descripción. Únicos parametro recibido por update_register_orm.
