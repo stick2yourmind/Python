@@ -34,3 +34,11 @@ Unit - 03:
     			Script to modify
     	REV. 2.0:
                 Script modified
+                
+                
+Unit - 04:
+
+    	REV. 2.0:
+                Nivel avanzado - unidad 04 - Rev. 2.0:
+  Añadidos decoradores print_add, print_delete y print_delete. En caso de resultar el proceso correctamente ejecutado se imprime en consola:
+  "print_add: One register has been added by using decorator", "print_delete: One register has been deleted by using decorator" y "print_update: One register has been updated by using decorator". En caso erróneo "print_add: Register could not been added by using decorator", "print_delete: Register could not been deleted by using decorator" y "print_update: Register could not been updated by using decorator".
