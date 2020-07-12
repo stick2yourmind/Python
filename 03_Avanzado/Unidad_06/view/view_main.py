@@ -166,7 +166,7 @@ class WindowView:
                                                   foreground = "white")
             self.frame_mw.Radio_theme_1.grid(row=7, columnspan=5, sticky="nsew")
             # Seventh row . theme 2
-            self.frame_mw.Radio_theme_2.configure(text="Azul", variable=self.radio_var, background="#264653",
+            self.frame_mw.Radio_theme_2.configure(text="Negro", variable=self.radio_var, background="#264653",
                                                        value="#264653", command= lambda : self.ch_color("tema_2"),
                                                   foreground = "white")
             self.frame_mw.Radio_theme_2.grid(row=8, columnspan=5, sticky="nsew")
@@ -314,11 +314,9 @@ class WindowView:
             F(self.estado, "#6")
 
     def show_table_by_element(self, fetched, index):
-        print("show_table_by_element: starting")
         if not self.frame_mw.Table.exists(self.counter_ID_table):
             self.frame_mw.Table.insert("", 'end', iid=self.counter_ID_table)
         self.frame_mw.Table.set(self.counter_ID_table, index, value=fetched)
-        print("show_table_by_element: finished")
 
     def click_show_reg(self):
         print("click_show_reg: starting")

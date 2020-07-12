@@ -60,3 +60,5 @@ Unit - 06:
 
     	REV. 2.0:
                 Añadido patron observador en la capa view. Modificación minima del código.
+    	REV. 2.1:
+                Corrección de columnas invertidas entre fecha y descripción.
