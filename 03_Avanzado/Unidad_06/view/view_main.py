@@ -5,6 +5,7 @@ import sys
 sys.path.append('..')
 from controller.controller_main import *
 from .view_extras import *
+from observerpattern.observerPattern import *
 """
            1º column                  2º column                     3º column           4º column
 +---------------------------+-------------------------+------------------------------+-------------+
@@ -224,94 +225,7 @@ class WindowView:
 
         print("show_table: finished")
 
-    class Publicador:
 
-        observadores = []
-
-        def Agregar(self, obj):
-            self.observadores.append(obj)
-
-        def Quitar(self, obj):
-            pass
-
-        def Notificar(self, F):
-            for observador in self.observadores:
-                observador.Update(F)
-
-    class Publicacion(Publicador):
-        def __init__(self):
-            self.estado = None
-
-        def SetEstado(self, value, F):
-            self.estado = value
-            self.Notificar(F)
-
-        def GetEstado(self):
-            return self.estado
-
-    class Observador:
-        def Update(self, F):
-            raise NotImplementedError("Delegación de actualización")
-
-    class ConcreteObserverID(Observador):
-        def __init__(self, obj):
-            self.observadorID = obj
-            self.observadorID.Agregar(self)
-
-        def Update(self, F):
-            print("Actualización dentro de ConcreteObserverID")
-            self.estado = self.observadorID.GetEstado().get("id")
-            F(self.estado, "#1")
-
-    class ConcreteObserverTitulo(Observador):
-        def __init__(self, obj):
-            self.observadorB = obj
-            self.observadorB.Agregar(self)
-
-        def Update(self, F):
-            print("Actualización dentro de ConcreteObserverTitulo")
-            self.estado = self.observadorB.GetEstado().get("titulo")
-            F(self.estado, "#2")
-
-    class ConcreteObserverDescripcion(Observador):
-        def __init__(self, obj):
-            self.observadorB = obj
-            self.observadorB.Agregar(self)
-
-        def Update(self, F):
-            print("Actualización dentro de ConcreteObserverDescripcion")
-            self.estado = self.observadorB.GetEstado().get("descripcion")
-            F(self.estado, "#3")
-
-    class ConcreteObserverFecha(Observador):
-        def __init__(self, obj):
-            self.observadorB = obj
-            self.observadorB.Agregar(self)
-
-        def Update(self, F):
-            print("Actualización dentro de ConcreteObserverFecha")
-            self.estado = self.observadorB.GetEstado().get("fecha")
-            F(self.estado, "#4")
-
-    class ConcreteObserverEstado(Observador):
-        def __init__(self, obj):
-            self.observadorB = obj
-            self.observadorB.Agregar(self)
-
-        def Update(self, F):
-            print("Actualización dentro de ConcreteObserverEstado")
-            self.estado = self.observadorB.GetEstado().get("estado")
-            F(self.estado, "#5")
-
-    class ConcreteObserverObjeto(Observador):
-        def __init__(self, obj):
-            self.observadorB = obj
-            self.observadorB.Agregar(self)
-
-        def Update(self, F):
-            print("Actualización dentro de ConcreteObserverObjeto")
-            self.estado = self.observadorB.GetEstado().get("objeto")
-            F(self.estado, "#6")
 
     def show_table_by_element(self, fetched, index):
         if not self.frame_mw.Table.exists(self.counter_ID_table):
@@ -325,13 +239,13 @@ class WindowView:
             showerror("¡Error de conexión!", ERROR_CONNECTION)
         else:
             self.clean_table()
-            treeview = self.Publicacion()
-            observador_id = self.ConcreteObserverID(treeview)
-            observador_titulo = self.ConcreteObserverTitulo(treeview)
-            observador_fecha = self.ConcreteObserverFecha(treeview)
-            observador_descripcion = self.ConcreteObserverDescripcion(treeview)
-            observador_estado = self.ConcreteObserverEstado(treeview)
-            observador_objeto = self.ConcreteObserverObjeto(treeview)
+            treeview = Publicacion()
+            observador_id = ConcreteObserverID(treeview)
+            observador_titulo = ConcreteObserverTitulo(treeview)
+            observador_fecha = ConcreteObserverFecha(treeview)
+            observador_descripcion = ConcreteObserverDescripcion(treeview)
+            observador_estado = ConcreteObserverEstado(treeview)
+            observador_objeto = ConcreteObserverObjeto(treeview)
             for item in fetched:
                 register = {"id": item[0], "titulo": item[1], "descripcion": item[2], "fecha": item[3],
                             "estado": item[4], "objeto": item[5]}

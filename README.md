@@ -62,3 +62,5 @@ Unit - 06:
                 Añadido patron observador en la capa view. Modificación minima del código.
     	REV. 2.1:
                 Corrección de columnas invertidas entre fecha y descripción.
+    	REV. 2.2:
+                Se mueven los módulos del patron observador a la carpeta observerpattern.
