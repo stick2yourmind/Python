@@ -1,3 +1,6 @@
+def show_table_by_element(fetched, index):
+    print("fetched: ", fetched, " index: ", index)
+
 class Publicador:
 
     observadores = []
@@ -35,7 +38,7 @@ class ConcreteObserverID(Observador):
     def Update(self):
         print("Actualización dentro de ConcreteObserverID")
         self.estado = self.observadorID.GetEstado().get("id")
-        print("ID = ", self.estado)
+        show_table_by_element(self.estado, "#1")
 
 class ConcreteObserverTitulo(Observador):
     def __init__(self, obj):
@@ -45,30 +48,59 @@ class ConcreteObserverTitulo(Observador):
     def Update(self):
         print("Actualización dentro de ConcreteObserverTitulo")
         self.estado = self.observadorB.GetEstado().get("titulo")
-        print("titulo = ", self.estado)
+        show_table_by_element(self.estado, "#2")
 
-
-class ConcreteObserverTitulo(Observador):
+class ConcreteObserverFecha(Observador):
     def __init__(self, obj):
         self.observadorB = obj
         self.observadorB.Agregar(self)
 
     def Update(self):
-        print("Actualización dentro de ConcreteObserverTitulo")
-        self.estado = self.observadorB.GetEstado().get("titulo")
-        print("titulo = ", self.estado)
+        print("Actualización dentro de ConcreteObserverFecha")
+        self.estado = self.observadorB.GetEstado().get("fecha")
+        show_table_by_element(self.estado, "#3")
+
+class ConcreteObserverDescripcion(Observador):
+    def __init__(self, obj):
+        self.observadorB = obj
+        self.observadorB.Agregar(self)
+
+    def Update(self):
+        print("Actualización dentro de ConcreteObserverDescripcion")
+        self.estado = self.observadorB.GetEstado().get("descripcion")
+        show_table_by_element(self.estado, "#4")
+
+class ConcreteObserverEstado(Observador):
+    def __init__(self, obj):
+        self.observadorB = obj
+        self.observadorB.Agregar(self)
+
+    def Update(self):
+        print("Actualización dentro de ConcreteObserverEstado")
+        self.estado = self.observadorB.GetEstado().get("estado")
+        show_table_by_element(self.estado, "#5")
+
+class ConcreteObserverObjeto(Observador):
+    def __init__(self, obj):
+        self.observadorB = obj
+        self.observadorB.Agregar(self)
+
+    def Update(self):
+        print("Actualización dentro de ConcreteObserverObjeto")
+        self.estado = self.observadorB.GetEstado().get("objeto")
+        show_table_by_element(self.estado, "#6")
 
 
-
-register = {"id": 1, "titulo":"Cantito de cancha sobre la progenitora de All Boys", "descripcion": "AsteriscoNuemeralArrobaSignodeExclamacionSignodeExclamacion"}
+register = {"id": 1, "titulo":"titulo prueba", "descripcion": "descrip prueba", "fecha": "hoy", "estado": "est pr",
+            "objeto": "obj test"}
 tema1 = Publicacion()
-observadorA = ConcreteObserverID(tema1)
-observadorB = ConcreteObserverTitulo(tema1)
+observador_id = ConcreteObserverID(tema1)
+observador_titulo = ConcreteObserverTitulo(tema1)
+observador_fecha = ConcreteObserverFecha(tema1)
+observador_descripcion = ConcreteObserverDescripcion(tema1)
+observador_estado = ConcreteObserverEstado(tema1)
+observador_objeto = ConcreteObserverObjeto(tema1)
 tema1.SetEstado(register)
-print(observadorA.__dict__)
-print(observadorB.__dict__)
-print('---'*25)
-print(Publicador.__dict__)        
         
         
         

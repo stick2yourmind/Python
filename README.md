@@ -53,3 +53,10 @@ Unit - 04:
     	            print_add: informa título y descripción, únicos parametro recibidos por add_reg_orm.
     	            print_delete: informa id, único parametro recibido por delete_reg_orm.
     	            print_update: informa id, título y descripción. Únicos parametro recibido por update_register_orm.
+
+Unit - 05: Ninguna
+
+Unit - 06:
+
+    	REV. 2.0:
+                Añadido patron observador en la capa view. Modificación minima del código.

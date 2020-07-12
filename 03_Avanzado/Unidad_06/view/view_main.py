@@ -5,7 +5,6 @@ import sys
 sys.path.append('..')
 from controller.controller_main import *
 from .view_extras import *
-
 """
            1º column                  2º column                     3º column           4º column
 +---------------------------+-------------------------+------------------------------+-------------+
@@ -225,12 +224,100 @@ class WindowView:
 
         print("show_table: finished")
 
+    class Publicador:
+
+        observadores = []
+
+        def Agregar(self, obj):
+            self.observadores.append(obj)
+
+        def Quitar(self, obj):
+            pass
+
+        def Notificar(self, F):
+            for observador in self.observadores:
+                observador.Update(F)
+
+    class Publicacion(Publicador):
+        def __init__(self):
+            self.estado = None
+
+        def SetEstado(self, value, F):
+            self.estado = value
+            self.Notificar(F)
+
+        def GetEstado(self):
+            return self.estado
+
+    class Observador:
+        def Update(self, F):
+            raise NotImplementedError("Delegación de actualización")
+
+    class ConcreteObserverID(Observador):
+        def __init__(self, obj):
+            self.observadorID = obj
+            self.observadorID.Agregar(self)
+
+        def Update(self, F):
+            print("Actualización dentro de ConcreteObserverID")
+            self.estado = self.observadorID.GetEstado().get("id")
+            F(self.estado, "#1")
+
+    class ConcreteObserverTitulo(Observador):
+        def __init__(self, obj):
+            self.observadorB = obj
+            self.observadorB.Agregar(self)
+
+        def Update(self, F):
+            print("Actualización dentro de ConcreteObserverTitulo")
+            self.estado = self.observadorB.GetEstado().get("titulo")
+            F(self.estado, "#2")
+
+    class ConcreteObserverDescripcion(Observador):
+        def __init__(self, obj):
+            self.observadorB = obj
+            self.observadorB.Agregar(self)
+
+        def Update(self, F):
+            print("Actualización dentro de ConcreteObserverDescripcion")
+            self.estado = self.observadorB.GetEstado().get("descripcion")
+            F(self.estado, "#3")
+
+    class ConcreteObserverFecha(Observador):
+        def __init__(self, obj):
+            self.observadorB = obj
+            self.observadorB.Agregar(self)
+
+        def Update(self, F):
+            print("Actualización dentro de ConcreteObserverFecha")
+            self.estado = self.observadorB.GetEstado().get("fecha")
+            F(self.estado, "#4")
+
+    class ConcreteObserverEstado(Observador):
+        def __init__(self, obj):
+            self.observadorB = obj
+            self.observadorB.Agregar(self)
+
+        def Update(self, F):
+            print("Actualización dentro de ConcreteObserverEstado")
+            self.estado = self.observadorB.GetEstado().get("estado")
+            F(self.estado, "#5")
+
+    class ConcreteObserverObjeto(Observador):
+        def __init__(self, obj):
+            self.observadorB = obj
+            self.observadorB.Agregar(self)
+
+        def Update(self, F):
+            print("Actualización dentro de ConcreteObserverObjeto")
+            self.estado = self.observadorB.GetEstado().get("objeto")
+            F(self.estado, "#6")
+
     def show_table_by_element(self, fetched, index):
         print("show_table_by_element: starting")
-        self.clean_table()
-        for x in range(len(fetched)):
-            item = fetched[x]
-            self.frame_mw.Table.insert("", 'end', values=(item[0], item[1], item[2], item[3], item[4], item[5]))
+        if not self.frame_mw.Table.exists(self.counter_ID_table):
+            self.frame_mw.Table.insert("", 'end', iid=self.counter_ID_table)
+        self.frame_mw.Table.set(self.counter_ID_table, index, value=fetched)
         print("show_table_by_element: finished")
 
     def click_show_reg(self):
@@ -239,7 +326,20 @@ class WindowView:
         if fetched == -1:
             showerror("¡Error de conexión!", ERROR_CONNECTION)
         else:
-            self.show_table(fetched)
+            self.clean_table()
+            treeview = self.Publicacion()
+            observador_id = self.ConcreteObserverID(treeview)
+            observador_titulo = self.ConcreteObserverTitulo(treeview)
+            observador_fecha = self.ConcreteObserverFecha(treeview)
+            observador_descripcion = self.ConcreteObserverDescripcion(treeview)
+            observador_estado = self.ConcreteObserverEstado(treeview)
+            observador_objeto = self.ConcreteObserverObjeto(treeview)
+            for item in fetched:
+                register = {"id": item[0], "titulo": item[1], "descripcion": item[2], "fecha": item[3],
+                            "estado": item[4], "objeto": item[5]}
+                treeview.SetEstado(register, self.show_table_by_element)
+                self.counter_ID_table = self.counter_ID_table + 1
+
         print("click_show_reg: finished")
 
     def click_add_reg(self, input_title, input_description):
@@ -312,6 +412,10 @@ class WindowView:
         self.item_selected = str(self.item_selected["values"][0])
         print("ID: " + self.item_selected + " seleccionado")
         print("table_double_click: finished")
+
+    def imprimirAlgo(self):
+        print(self.counter_ID_table)
+        print("self.counter_ID_table")
 
     @staticmethod
     def click_create_d_b():

@@ -1,6 +1,10 @@
+def imprimirAlgo():
+    print("Algo")
+
 class Publicador:
 
     observadores = []
+    publicador = ""
     
     def Agregar(self, obj):
         self.observadores.append(obj)
@@ -9,9 +13,10 @@ class Publicador:
         pass
         
     def Notificar(self):
+        imprimirAlgo()
         for observador in self.observadores:
             observador.Update()
-            
+
 class Publicacion(Publicador):
     def __init__(self):
         self.estado = None
@@ -64,6 +69,13 @@ register = {"id": 1, "titulo":"titulo de prueba", "descripcion": "descripcion de
 tema1 = Publicacion()
 observadorA = ConcreteObserverID(tema1)
 observadorB = ConcreteObserverTitulo(tema1)
+observadorB.observadorB.publicador="B"
+observadorA.observadorA.publicador="A"
+print(observadorB.observadorB.publicador)
+print(observadorA.observadorA.publicador)
+observadorB.observadorB.publicador="B"
+print(observadorB.observadorB.publicador)
+print(observadorA.observadorA.publicador)
 tema1.SetEstado(register)
 print(observadorA.__dict__)
 print(observadorB.__dict__)
