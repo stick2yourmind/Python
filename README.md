@@ -64,3 +64,6 @@ Unit - 06:
                 Corrección de columnas invertidas entre fecha y descripción.
     	REV. 2.2:
                 Se mueven los módulos del patron observador a la carpeta observerpattern.
+    	REV. 2.3:
+                Se corrige error de los radio button que no permitia ver cual estaba seleccionado, salvo el default, 
+				solo se cambio el fondo de color para cada caso con selectcolor="#color_correspondiente".

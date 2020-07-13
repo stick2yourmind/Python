@@ -2,10 +2,12 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.messagebox import *
 import sys
+
 sys.path.append('..')
 from controller.controller_main import *
 from .view_extras import *
 from observerpattern.observerPattern import *
+
 """
            1º column                  2º column                     3º column           4º column
 +---------------------------+-------------------------+------------------------------+-------------+
@@ -42,11 +44,12 @@ ERROR_DELETE = "No se ha podido eliminar el registro debido a que no posee conex
 ERROR_SELECT_ITEM = "No ha seleccionado un registro. Para seleccionar un registro debe hacer doble click sobre el " \
                     "registro deseado."
 
+
 class WindowView:
     def __init__(self, tab):
-        self.item_selected=None
-        self.title_selected=None
-        self.description_selected=None
+        self.item_selected = None
+        self.title_selected = None
+        self.description_selected = None
         self.var_entry = [-1, -1]
         self.window = Tk()
         self.window.title("Tarea POO")
@@ -79,7 +82,7 @@ class WindowView:
 
     def layout_make(self, tab="default"):
         print("layout_make: starting")
-        if tab=="default":
+        if tab == "default":
             self.frame_mw.pack()
             # First row
             self.frame_mw.Label_head = Label(self.frame_mw)
@@ -88,7 +91,7 @@ class WindowView:
             self.frame_mw.Entry_title = Entry(self.frame_mw)
             # Third row
             self.frame_mw.Label_description = Label(self.frame_mw)
-            self.frame_mw.Entry_description  = Entry(self.frame_mw)
+            self.frame_mw.Entry_description = Entry(self.frame_mw)
             # Fourth row
             self.frame_mw.Button_showReg = Button(self.frame_mw)
             # Fifth row - Treeview
@@ -110,15 +113,15 @@ class WindowView:
 
     def layout_config(self, tab="default"):
         print("layout_config: starting")
-        if tab=="default":
+        if tab == "default":
             # First row
             self.frame_mw.Label_head.configure(text="Ingrese sus datos", bg="#b92041", fg="white",
                                                font=('Helvetica', 16, "bold"))
             self.frame_mw.Label_head.grid(row=0, columnspan=5, sticky="nsew")
             # Second row
-            self.frame_mw.Label_title.configure(text = "Título", width = 22, anchor = W)
+            self.frame_mw.Label_title.configure(text="Título", width=22, anchor=W)
             self.frame_mw.Label_title.grid(row=1, column=0, columnspan=2)
-            self.frame_mw.Entry_title.configure(textvariable = self.var_entry[self.title], width = 120)
+            self.frame_mw.Entry_title.configure(textvariable=self.var_entry[self.title], width=120)
             self.frame_mw.Entry_title.grid(row=1, column=1, columnspan=4)
             # Third row
             self.frame_mw.Label_description.configure(text="Descripción", width=22, anchor=W)
@@ -126,8 +129,8 @@ class WindowView:
             self.frame_mw.Entry_description.configure(textvariable=self.var_entry[self.description], width=120)
             self.frame_mw.Entry_description.grid(row=2, column=1, columnspan=4)
             # Fourth row
-            #self.frame_mw.Button_showReg.configure(text="Mostrar registros", state="disable")
-            self.frame_mw.Button_showReg.configure(text="Mostrar registros", command= self.click_show_reg)
+            # self.frame_mw.Button_showReg.configure(text="Mostrar registros", state="disable")
+            self.frame_mw.Button_showReg.configure(text="Mostrar registros", command=self.click_show_reg)
             self.frame_mw.Button_showReg.grid(row=3, column=0, columnspan=5)
             # Fifth row
             self.frame_mw.Table.grid(row=4, column=0, columnspan=4, sticky="nsew")
@@ -149,32 +152,32 @@ class WindowView:
             # Sixth row
             self.frame_mw.createDB.configure(text="Crear base de datos y tabla", command=self.click_create_d_b)
             self.frame_mw.createDB.grid(row=5, column=0)
-            self.frame_mw.addRegister.configure(text="Alta", command= lambda : [self.click_add_reg(
+            self.frame_mw.addRegister.configure(text="Alta", command=lambda: [self.click_add_reg(
                 self.var_entry[self.title].get(), self.var_entry[self.description].get())])
             self.frame_mw.addRegister.grid(row=5, column=1)
-            self.frame_mw.updateRegister.configure(text="Actualizar", command= lambda : [self.click_update_reg()])
+            self.frame_mw.updateRegister.configure(text="Actualizar", command=lambda: [self.click_update_reg()])
             self.frame_mw.updateRegister.grid(row=5, column=2)
-            self.frame_mw.deleteRegister.configure(text="Eliminar", command= lambda : [self.click_delete_reg()])
+            self.frame_mw.deleteRegister.configure(text="Eliminar", command=lambda: [self.click_delete_reg()])
             self.frame_mw.deleteRegister.grid(row=5, column=3)
             # Seventh row . theme default
             self.frame_mw.Radio_theme_default.configure(text="Default", variable=self.radio_var,
                                                         background="SystemButtonFace", value="SystemButtonFace",
-                        command= lambda : self.ch_color("default"))
+                                                        command=lambda: self.ch_color("default"))
             self.frame_mw.Radio_theme_default.grid(row=6, columnspan=5, sticky="nsew")
             # Seventh row . theme 1
             self.frame_mw.Radio_theme_1.configure(text="Naranja", variable=self.radio_var, background="#eb6434",
-                                                  value="#eb6434", command= lambda : self.ch_color("tema_1"),
-                                                  foreground = "white")
+                                                  value="#eb6434", command=lambda: self.ch_color("tema_1"),
+                                                  foreground="white", selectcolor="#eb6434")
             self.frame_mw.Radio_theme_1.grid(row=7, columnspan=5, sticky="nsew")
             # Seventh row . theme 2
             self.frame_mw.Radio_theme_2.configure(text="Negro", variable=self.radio_var, background="#264653",
-                                                       value="#264653", command= lambda : self.ch_color("tema_2"),
-                                                  foreground = "white")
+                                                  value="#264653", command=lambda: self.ch_color("tema_2"),
+                                                  foreground="white", selectcolor="#264653")
             self.frame_mw.Radio_theme_2.grid(row=8, columnspan=5, sticky="nsew")
             # Seventh row . theme 3
             self.frame_mw.Radio_theme_3.configure(text="Verdeazulado", variable=self.radio_var, background="#119296",
-                                                  value="#119296", command= lambda : self.ch_color("tema_3"),
-                                                  foreground = "white")
+                                                  value="#119296", command=lambda: self.ch_color("tema_3"),
+                                                  foreground="white", selectcolor="#119296")
             self.frame_mw.Radio_theme_3.grid(row=9, columnspan=5, sticky="nsew")
             # Unselect radio buttons
             self.radio_var.set(0)
@@ -224,8 +227,6 @@ class WindowView:
             self.frame_mw.Table.set(self.counter_ID_table, '#6', value=item[5])
 
         print("show_table: finished")
-
-
 
     def show_table_by_element(self, fetched, index):
         if not self.frame_mw.Table.exists(self.counter_ID_table):
@@ -313,14 +314,14 @@ class WindowView:
 
     def table_double_click(self):
         print("table_double_click: starting")
-        self.item_selected=self.frame_mw.Table.item(self.frame_mw.Table.focus())
-        #print(self.item_selected)
+        self.item_selected = self.frame_mw.Table.item(self.frame_mw.Table.focus())
+        # print(self.item_selected)
         # Load focus item into entry's
         self.var_entry[self.description].set(str(self.item_selected["values"][3]))
         self.var_entry[self.title].set(str(self.item_selected["values"][1]))
         # Save item's ID into self.item_selected
-        self.description_selected=str(self.item_selected["values"][3])
-        self.title_selected=str(self.item_selected["values"][1])
+        self.description_selected = str(self.item_selected["values"][3])
+        self.title_selected = str(self.item_selected["values"][1])
         self.item_selected = str(self.item_selected["values"][0])
         print("ID: " + self.item_selected + " seleccionado")
         print("table_double_click: finished")
@@ -336,4 +337,3 @@ class WindowView:
         if aux == -1:
             showerror("¡Error de conexión!", ERROR_CONNECTION)
         print("click_create_d_b: finished")
-
